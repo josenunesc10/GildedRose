@@ -13,6 +13,10 @@ public class GildedRoseTest {
 	private Item createAgedBrieItem(int sellIn, int quality) {
 		return new Item("Aged Brie", sellIn, quality);
 	}
+	
+	private Item createSulfurasItem(int sellIn, int quality) {
+		return new Item("Sulfuras, Hand of Ragnaros", sellIn, quality);
+	}
 
 	@Test
 	public void foo() {
@@ -123,6 +127,26 @@ public class GildedRoseTest {
 		app.updateQuality();
 		assertEquals(-1, app.items[0].sellIn);
 		// The Quality of an item is never more than 50
+		assertEquals(50, app.items[0].quality);
+	}
+	
+	@Test
+	public void testSulfurasNoDegradationOnSellIn() {
+		Item[] items = new Item[] { createSulfurasItem(0, 80) };
+		GildedRose app = new GildedRose(items);
+		app.updateQuality();
+		// "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
+		assertEquals(0, app.items[0].sellIn);
+		assertEquals(80, app.items[0].quality);
+	}
+	
+	@Test
+	public void testSulfurasNoDegradationOrSellInChange() {
+		Item[] items = new Item[] { createSulfurasItem(10, 50) };
+		GildedRose app = new GildedRose(items);
+		app.updateQuality();
+		// "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
+		assertEquals(10, app.items[0].sellIn);
 		assertEquals(50, app.items[0].quality);
 	}
 }
