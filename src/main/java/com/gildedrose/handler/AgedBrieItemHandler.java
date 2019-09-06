@@ -6,10 +6,12 @@ public class AgedBrieItemHandler extends AbstractItemHandler{
 
 	@Override
 	public void updateItem(Item item) {
-		increaseQualityIfUnderLimit(item);
 		decreaseSellIn(item);
+		
 		if (item.sellIn < 0) {
-			increaseQualityIfUnderLimit(item);
+			increaseQualityIfUnderLimit(item, 2);
+		} else {
+			increaseQualityIfUnderLimit(item, 1);
 		}
 	}
 }
