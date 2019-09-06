@@ -26,14 +26,10 @@ class GildedRose {
 	}
 
 	private void updateAgedBrieItem(Item item) {
-		if (item.quality < 50) {
-			item.quality = item.quality + 1;
-		}
-		item.sellIn = item.sellIn - 1;
+		increaseQualityIfUnderLimit(item);
+		decreaseSellIn(item);
 		if (item.sellIn < 0) {
-			if (item.quality < 50) {
-				item.quality = item.quality + 1;
-			}
+			increaseQualityIfUnderLimit(item);
 		}
 	}
 
@@ -42,38 +38,43 @@ class GildedRose {
 	}
 
 	private void updateBackstagePassItem(Item item) {
-		if (item.quality < 50) {
-			item.quality = item.quality + 1;
-
-			if (item.sellIn < 11) {
-				if (item.quality < 50) {
-					item.quality = item.quality + 1;
-				}
-			}
-
-			if (item.sellIn < 6) {
-				if (item.quality < 50) {
-					item.quality = item.quality + 1;
-				}
-			}
+		increaseQualityIfUnderLimit(item);
+		if (item.sellIn < 11) {
+			increaseQualityIfUnderLimit(item);
 		}
-		item.sellIn = item.sellIn - 1;
+
+		if (item.sellIn < 6) {
+			increaseQualityIfUnderLimit(item);
+		}
+		decreaseSellIn(item);
 		if (item.sellIn < 0) {
-			item.quality = item.quality - item.quality;
+			item.quality = 0;
 		}
 
 	}
 
 	private void updateGenericItem(Item item) {
+		decreaseQualityIfAboveZero(item);
+		decreaseSellIn(item);
+
+		if (item.sellIn < 0) {
+			decreaseQualityIfAboveZero(item);
+		}
+	}
+
+	private void decreaseQualityIfAboveZero(Item item) {
 		if (item.quality > 0) {
 			item.quality = item.quality - 1;
 		}
-		item.sellIn = item.sellIn - 1;
+	}
 
-		if (item.sellIn < 0) {
-			if (item.quality > 0) {
-				item.quality = item.quality - 1;
-			}
+	private void decreaseSellIn(Item item) {
+		item.sellIn = item.sellIn - 1;
+	}
+
+	private void increaseQualityIfUnderLimit(Item item) {
+		if (item.quality < 50) {
+			item.quality = item.quality + 1;
 		}
 	}
 }
