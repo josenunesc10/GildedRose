@@ -8,6 +8,7 @@ public class ItemHandlerFactory {
 	private String AGED_BRIE_TYPE = "Aged Brie";
 	private String SULFURAS_TYPE = "Sulfuras";
 	private String BACKSTAGE_PASS_TYPE = "Backstage pass";
+	private String CONJURED_TYPE = "Conjured";
 
 	public ItemHandler getItemHandler(Item item) {
 		// TODO: Could do caching
@@ -19,6 +20,9 @@ public class ItemHandlerFactory {
 		}
 		if (item.name.startsWith(BACKSTAGE_PASS_TYPE)) {
 			return new BackstagePassItemHandler();
+		}
+		if (item.name.startsWith(CONJURED_TYPE)) {
+			return new ConjuredItemHandler();
 		}
 		return new GenericItemHandler();
 	}

@@ -21,6 +21,10 @@ public class GildedRoseTest {
 	private Item createBackstagePassItem(int sellIn, int quality) {
 		return new Item("Backstage passes to a TAFKAL80ETC concert", sellIn, quality);
 	}
+	
+	private Item createConjuredItem(int sellIn, int quality) {
+		return new Item("Conjured Mana Cake", sellIn, quality);
+	}
 
 	@Test
 	public void foo() {
@@ -261,5 +265,61 @@ public class GildedRoseTest {
 		assertEquals(4, app.items[0].sellIn);
 		// an item can never have its Quality increase above 50
 		assertEquals(50, app.items[0].quality);
+	}
+	
+	@Test
+	public void testConjuredItemNormalDegradation() {
+		Item[] items = new Item[] { createConjuredItem(20, 50) };
+		GildedRose app = new GildedRose(items);
+		app.updateQuality();
+		// At the end of each day our system lowers both values (quality and sell in)
+		// for every item
+		// "Conjured" items degrade in Quality twice as fast as normal items
+		assertEquals(19, app.items[0].sellIn);
+		assertEquals(48, app.items[0].quality);
+	}
+
+	@Test
+	public void testConjuredItemJustBeforeSellInDegradation() {
+		Item[] items = new Item[] { createConjuredItem(1, 50) };
+		GildedRose app = new GildedRose(items);
+		app.updateQuality();
+		// At the end of each day our system lowers both values (quality and sell in)
+		// for every item
+		// "Conjured" items degrade in Quality twice as fast as normal items
+		assertEquals(0, app.items[0].sellIn);
+		assertEquals(48, app.items[0].quality);
+	}
+
+	@Test
+	public void testConjuredItemOnSellInDegradation() {
+		Item[] items = new Item[] { createConjuredItem(0, 50) };
+		GildedRose app = new GildedRose(items);
+		app.updateQuality();
+		assertEquals(-1, app.items[0].sellIn);
+		// Once the sell by date has passed, Quality degrades twice as fast
+		// "Conjured" items degrade in Quality twice as fast as normal items
+		assertEquals(46, app.items[0].quality);
+	}
+
+	@Test
+	public void testConjuredItemAfterSellInDegradation() {
+		Item[] items = new Item[] { createConjuredItem(-10, 50) };
+		GildedRose app = new GildedRose(items);
+		app.updateQuality();
+		assertEquals(-11, app.items[0].sellIn);
+		// Once the sell by date has passed, Quality degrades twice as fast
+		// "Conjured" items degrade in Quality twice as fast as normal items
+		assertEquals(46, app.items[0].quality);
+	}
+
+	@Test
+	public void testConjuredItemLimitDegradation() {
+		Item[] items = new Item[] { createConjuredItem(0, 0) };
+		GildedRose app = new GildedRose(items);
+		app.updateQuality();
+		assertEquals(-1, app.items[0].sellIn);
+		// The Quality of an item is never negative
+		assertEquals(0, app.items[0].quality);
 	}
 }
