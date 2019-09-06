@@ -6,12 +6,18 @@ The specification of the exercise can be found [here](https://github.com/emilyba
 
 ## Implementation description
 
-In order to try to follow the single-responsibility principle and facilitate extension, the item update logic was split into different classes (<Type>ItemHandler), each responsible for the update of a single item type.
+In order to try to follow the single-responsibility principle and facilitate extension, the item update logic was split into different classes, each responsible for the update of a single item type.
 
 The handlers are instantiated through a factory that detects the appropriate handler from the the name of the item to be processed.
 
+![Screenshot](diagram.png)
+
 ## Building and Dependencies
-The project uses Java 8  and is built with Maven. 
+The project uses Java 8  and is built with Maven. To build the project, run the following command:
+
+```bash
+mvn install
+```
 
 There is only one dependency, used in the tests.
 
